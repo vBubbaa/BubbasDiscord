@@ -1,5 +1,7 @@
 // Import env variables
-require('dotenv').config()
+require('dotenv').config();
+const emojiReplier = require('./util/emoji-replier');
+const dontCare = require('./util/dont-care');
 
 const { prefix } = require("./config.json");
 
@@ -52,18 +54,22 @@ bot.on("messageCreate", async message => {
     if(message.author.bot) return;
     if(message.channel.type === "dm") return;
 
+    // TOOD: format pre-command functionality into a single outside function that runs all of the pre-command events
+    emojiReplier.getRandomEmoji(message);
+    // Does the bot care?
+    dontCare.doesTheBotCare(message);
+
     //get prefix from config and prepare message so it can be read as a command
     let messageArray = message.content.split(" ");
     let cmd = messageArray[0];
     let args = messageArray.slice(1);
-
+    
     //Check for prefix
     if(!cmd.startsWith(prefix)) return;
 
     //Get the command from the commands collection and then if the command is found run the command file
     let commandfile = bot.commands.get(cmd.slice(prefix.length));
     if(commandfile) commandfile.run(bot,message,args);
-
 });
 
 //Token needed in config.json
