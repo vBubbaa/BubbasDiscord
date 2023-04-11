@@ -1,4 +1,7 @@
-const { prefix, token } = require("./config.json");
+// Import env variables
+require('dotenv').config()
+
+const { prefix } = require("./config.json");
 
 const { Client, Intents, Collection } = require('discord.js');
 const bot = new Client({ 
@@ -64,4 +67,4 @@ bot.on("messageCreate", async message => {
 });
 
 //Token needed in config.json
-bot.login(token);
+bot.login(process.env.DISCORD_TOKEN);
